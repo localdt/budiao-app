@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  #backend:
+    #build: 
+      #context: ./backend
+      #dockerfile: Dockerfile
+    #container_name: backend_container
+    #env_file: .env
+    #ports:
+      #- "8000:8000"
+    #depends_on:
+      #- postgres
+    #volumes:
+      #- ./backend:/app
+    #environment:
+      #- ENV=development
+
+  #frontend:
+    #build: ./frontend
+    #container_name: frontend_container
+    #ports:
+      #- "3000:3000"
+    #volumes:
+      #- ./frontend:/app
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: db
+    ports:
+      - "5433:5433"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    command: -p 5433
+
+volumes:
+  postgres_data:
