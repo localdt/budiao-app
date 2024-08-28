@@ -28,8 +28,3 @@ async def startup():
         await conn.run_sync(Base.metadata.create_all)
     
 app.include_router(users.router)
-
-# Root path
-# @app.get("/")
-# async def read_root():
-#     return {"message": "Welcome to the API!"}
