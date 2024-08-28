@@ -1,10 +1,14 @@
 # Ponto de entrada da aplicação
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database import async_engine, Base
-from .routers import users
+from .config import async_engine, Base
+from .controller import users
 
-app = FastAPI()
+app = FastAPI(
+        title= "Budiao App",
+        description= "Login Page",
+        version= "1"
+)
 
 # Allow CORS for frontend
 origins = [
@@ -28,8 +32,3 @@ async def startup():
         await conn.run_sync(Base.metadata.create_all)
     
 app.include_router(users.router)
-
-# Root path
-# @app.get("/")
-# async def read_root():
-#     return {"message": "Welcome to the API!"}
