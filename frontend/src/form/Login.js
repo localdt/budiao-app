@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-
+import React from "react";
+import { Link } from "react-router-dom";
 export default function Login(props) {
 
     return (
         <React.Fragment>
             <div>
                 <h1 className="text-3xl font-bold text-center mb-4 cursor-pointer">
-                   Bem-vindo ao Budião App!
+                    Bem-vindo ao Budião App!
                 </h1>
                 <p className="w-80 text-center text-sm mb-8 font-semibold text-gray-700 tracking-wide cursor-pointer mx-auto">
                     Por favor, insira seu login:
@@ -34,8 +34,14 @@ export default function Login(props) {
                     </button>
                     <p className="mt-4 text-sm">
                         Não possui login?{" "}
-                        <span className="underline cursor-pointer">Registrar</span>
-                        {" "}
+                        <Link
+                            to="/?register"
+                            onClick={() => {
+                                props.setPage("register");
+                            }}
+                        >
+                            <span className="underline cursor-pointer">Registrar</span>
+                        </Link>{" "}
                         <span className="underline cursor-pointer">Esqueceu a senha?</span>
                     </p>
                 </div>
