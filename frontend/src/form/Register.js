@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "react-toastify";
 
 export default function Register(props) {
@@ -103,6 +104,7 @@ export default function Register(props) {
                     />
                     <DatePicker
                         className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
+                        wrapperClassName="w-full" 
                         dateFormat="dd-MM-yyyy"
                         placeholderText="Data de aniversário"
                         selected={birthDate}

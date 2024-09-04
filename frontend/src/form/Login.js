@@ -1,8 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 export default function Login(props) {
-
-    return (
+    const [loginForm, setLoginform] = useState({
+        username: "",
+        password: "",
+      });
+    const apiUrl = process.env.REACT_APP_API_URL;
+    /*
+    const onChangeForm = (label, event) => {
+        switch (label) {
+          case "username":
+            setLoginform({ ...loginForm, username: event.target.value });
+            break;
+          case "password":
+            setLoginform({ ...loginForm, password: event.target.value });
+            break;
+        }
+      };
+      const onSubmitHandler = async (event) => {
+        event.preventDefault();
+        console.log(loginForm);
+        // call api login
+        await axios
+          .post(`${apiUrl}/users`, loginForm)
+          .then((response) => {
+            console.log(response);
+            // Save token to local storage
+            localStorage.setItem("auth_token", response.data.result.access_token);
+            localStorage.setItem(
+              "auth_token_type",
+              response.data.result.token_type
+            );
+    
+            // add successfully notif
+            toast.success(response.data.detail);
+            // reload page after success login
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          })
+          .catch((error) => {
+            // add error notif
+            
+            console.log(error);
+            toast.error(error.response.data.detail);
+          });
+      };
+      */
+      return (
         <React.Fragment>
             <div>
                 <h1 className="text-3xl font-bold text-center mb-4 cursor-pointer">
