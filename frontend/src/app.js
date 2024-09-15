@@ -4,6 +4,7 @@ import Forgot from "./form/Forgot";
 import Login from "./form/Login";
 import Register from "./form/Register";
 import Home from "./Home";
+import Map from "./form/Map";
 
 function App() {
   const [page, setPage] = useState("login");
@@ -24,15 +25,16 @@ function App() {
     if (page === "register") {
       return <Register setPage={setPage} />;
     }
+    if (page === "map") {
+      return <Map setPage={setPage} />;
+    }
   };
 
   const pages = () => {
     if (token == null) {
       return (
-        <div className="min-h-screen bg-blue-400 flex justify-center items-center">
-          <div className="py-12 px-12 bg-white rounded-2xl shadow-xl z-20">
+        <div>
             {chosePage()}
-          </div>
         </div>
       );
     } else {

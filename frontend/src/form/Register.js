@@ -5,9 +5,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "react-toastify";
 
 export default function Register(props) {
- 
+
     const apiUrl = process.env.REACT_APP_API_URL;
- 
+
     const options = [
         { value: "", label: "Selecione o gênero" },
         { value: "Male", label: "Masculino" },
@@ -76,116 +76,120 @@ export default function Register(props) {
     const onSubmitHandler = async (event) => {
         event.preventDefault();
         console.log(formRegister);
-        console.log({apiUrl})
+        console.log({ apiUrl })
         toast.success("test");
     }
 
 
     return (
-  
+
         <React.Fragment>
-            <div>
-                <h1 className="text-3xl font-bold text-center mb-4 cursor-pointer">
-                    Criar uma conta
-                </h1>
-                <p className="w-80 text-center text-sm mb-8 font-semibold text-gray-700 tracking-wide cursor-pointer mx-auto">
-                    Bem Vindo ao Budiao-App!
-                </p>
+            <div className="min-h-screen bg-blue-400 flex justify-center items-center">
+                <div className="py-12 px-12 bg-white rounded-2xl shadow-xl z-20">
+                    <div>
+                        <h1 className="text-3xl font-bold text-center mb-4 cursor-pointer">
+                            Criar uma conta
+                        </h1>
+                        <p className="w-80 text-center text-sm mb-8 font-semibold text-gray-700 tracking-wide cursor-pointer mx-auto">
+                            Bem Vindo ao Budiao-App!
+                        </p>
+                    </div>
+                    <form onSubmit={onSubmitHandler}>
+                        <div className="space-y-4">
+                            <input
+                                type="text"
+                                placeholder="Nome completo"
+                                className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
+                                onChange={(event) => {
+                                    onChangeForm("name", event);
+                                }}
+                            />
+                            <DatePicker
+                                className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
+                                wrapperClassName="w-full"
+                                dateFormat="dd-MM-yyyy"
+                                placeholderText="Data de aniversário"
+                                selected={birthDate}
+                                onChange={(event) => {
+                                    onChangeForm("birth", event);
+                                }}
+                            />
+                            <select
+                                value={formRegister.sex}
+                                className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-yellow-400"
+                                onChange={(event) => {
+                                    onChangeForm("sex", event);
+                                }}
+                            >
+                                {options.map((data) => {
+                                    if (data.value === "") {
+                                        return (
+                                            <option key={data.label} value={data.value} disabled>
+                                                {data.label}
+                                            </option>
+                                        );
+                                    } else {
+                                        return (
+                                            <option key={data.label} value={data.value}>
+                                                {data.label}
+                                            </option>
+                                        );
+                                    }
+                                })}
+                            </select>
+                            <input
+                                type="number"
+                                placeholder="Telefone"
+                                className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
+                                onChange={(event) => {
+                                    onChangeForm("username", event);
+                                }}
+                            />
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
+                                onChange={(event) => {
+                                    onChangeForm("email", event);
+                                }}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Usuário"
+                                className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
+                                onChange={(event) => {
+                                    onChangeForm("username", event);
+                                }}
+                            />
+                            <input
+                                type="password"
+                                placeholder="Senha"
+                                className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
+                            />
+                        </div>
+                        <div className="text-center mt-6">
+                            <button
+                                type="submit"
+                                className="py-3 w-64 text-xl text-white bg-blue-400 rounded-2xl hover:bg-blue-300 active:bg-blue-500 outline-none"
+                            >
+                                Criar conta
+                            </button>
+                            <p className="mt-4 text-sm">
+                                Já possui uma conta?{" "}
+                                <Link
+                                    to="/?login"
+                                    onClick={() => {
+                                        props.setPage("login");
+                                    }}
+                                >
+                                    <span className="underline cursor-pointer">Logar</span>
+                                </Link>
+                                {" "}
+                            </p>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <form onSubmit={onSubmitHandler}>
-                <div className="space-y-4">
-                    <input
-                        type="text"
-                        placeholder="Nome completo"
-                        className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
-                        onChange={(event) => {
-                            onChangeForm("name", event);
-                        }}
-                    />
-                    <DatePicker
-                        className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
-                        wrapperClassName="w-full" 
-                        dateFormat="dd-MM-yyyy"
-                        placeholderText="Data de aniversário"
-                        selected={birthDate}
-                        onChange={(event) => {
-                            onChangeForm("birth", event);
-                        }}
-                    />
-                    <select
-                        value={formRegister.sex}
-                        className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-yellow-400"
-                        onChange={(event) => {
-                            onChangeForm("sex", event);
-                        }}
-                    >
-                        {options.map((data) => {
-                            if (data.value === "") {
-                                return (
-                                    <option key={data.label} value={data.value} disabled>
-                                        {data.label}
-                                    </option>
-                                );
-                            } else {
-                                return (
-                                    <option key={data.label} value={data.value}>
-                                        {data.label}
-                                    </option>
-                                );
-                            }
-                        })}
-                    </select>
-                    <input
-                        type="number"
-                        placeholder="Telefone"
-                        className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
-                        onChange={(event) => {
-                            onChangeForm("username", event);
-                        }}
-                    />
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
-                        onChange={(event) => {
-                            onChangeForm("email", event);
-                        }}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Usuário"
-                        className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
-                        onChange={(event) => {
-                            onChangeForm("username", event);
-                        }}
-                    />
-                    <input
-                        type="password"
-                        placeholder="Senha"
-                        className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
-                    />
-                </div>
-                <div className="text-center mt-6">
-                    <button
-                        type="submit"
-                        className="py-3 w-64 text-xl text-white bg-blue-400 rounded-2xl hover:bg-blue-300 active:bg-blue-500 outline-none"
-                    >
-                        Criar conta
-                    </button>
-                    <p className="mt-4 text-sm">
-                        Já possui uma conta?{" "}
-                        <Link
-                            to="/?login"
-                            onClick={() => {
-                                props.setPage("login");
-                            }}
-                        >
-                            <span className="underline cursor-pointer">Logar</span>
-                        </Link>
-                        {" "}
-                    </p>
-                </div>
-            </form>
-        </React.Fragment>
+        </React.Fragment >
     )
 }
