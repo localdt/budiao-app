@@ -20,9 +20,16 @@ AsyncSessionLocal = sessionmaker(
     class_=AsyncSession  # Ensure the session is asynchronous
 )
 
-Base = declarative_base()
+db = declarative_base()
 
 # Dependency that provides an async session to routes
 async def get_async_session():
     async with AsyncSessionLocal() as session:
         yield session
+
+async def commit_rollback():
+    try:
+        await db.commit()
+    except Exception:
+        await db.rollback()
+        raise

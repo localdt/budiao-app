@@ -1,8 +1,9 @@
+
 # Ponto de entrada da aplicação
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .utils.config import async_engine, Base
-from .router import user
+from .utils.config import async_engine, db
+from .router import user, authentication
 
 app = FastAPI(
         title= "Budiao App",
@@ -29,6 +30,7 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup():
     async with async_engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(db.metadata.create_all)
     
+app.include_router(authentication.router)
 app.include_router(user.router)

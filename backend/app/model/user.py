@@ -1,8 +1,8 @@
 # Modelos SQLAlchemy
 from sqlalchemy import Column, Integer, String
-from ..utils.config import Base
+from ..utils.config import db
 
-class User(Base):
+class User(db):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
