@@ -15,14 +15,14 @@ export default function Map(props) {
         <React.Fragment>
             <Menu />
             <Helmet>
-                /* Javascript required - Leafleat */
+                {/* Javascript required - Leafleat */}
                 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
                     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
                     crossorigin=""></script>
             </Helmet>
-            /* HTML id required - Leafleat */
+            {/* HTML id required - Leafleat */}
             <div id="map">
-                <MapContainer center={[latitude, longitude]} zoom={7} style={{ height: "100vh", width: "100vw" }}> /* if style is not set, Leafleat will not render */
+                <MapContainer center={[latitude, longitude]} zoom={7} style={{ height: "100vh", width: "100vw" }}> {/* if style is not set, Leafleat will not render */}
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
