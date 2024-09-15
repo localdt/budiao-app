@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+
 export default function Login(props) {
     const [loginForm, setLoginform] = useState({
         username: "",
         password: "",
       });
     const apiUrl = process.env.REACT_APP_API_URL;
-    /*
     const onChangeForm = (label, event) => {
         switch (label) {
           case "username":
@@ -16,7 +18,29 @@ export default function Login(props) {
             setLoginform({ ...loginForm, password: event.target.value });
             break;
         }
-      };
+    };
+    const onSubmitHandler = async (event) => {
+        event.preventDefault();
+        console.log(loginForm);
+        await axios
+            .post("http://localhost:8000/auth/login", loginForm)
+            .then((response) => {
+                console.log(response);
+                // add successfully notif
+                toast.success(response.data.detail);
+                // reload page after success login
+                setTimeout(() => {
+                window.location.reload();
+                }, 1000);
+            
+            })
+            .catch((error) => {
+                // add error notif
+                console.log(error);
+                toast.error(error.response.data.detail);
+            });
+    }
+    /*
       const onSubmitHandler = async (event) => {
         event.preventDefault();
         console.log(loginForm);
@@ -57,17 +81,23 @@ export default function Login(props) {
                     Por favor, insira seu login:
                 </p>
             </div>
-            <form>
+            <form onSubmit={onSubmitHandler}>
                 <div className="space-y-4">
                     <input
                         type="text"
                         placeholder="Usuário"
                         className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
+                        onChange={(event) => {
+                            onChangeForm("username", event);
+                        }}
                     />
                     <input
                         type="password"
                         placeholder="Senha"
                         className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
+                        onChange={(event) => {
+                            onChangeForm("password", event);
+                        }}
                     />
                 </div>
                 <div className="text-center mt-6">

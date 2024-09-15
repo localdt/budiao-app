@@ -7,7 +7,7 @@ from .router import user, authentication
 
 app = FastAPI(
         title= "Budiao App",
-        description= "Login Page",
+        description= "API - Budiao App system",
         version= "1"
 )
 
@@ -16,6 +16,7 @@ origins = [
     "http://localhost",
     "http://localhost:8000",
     # Add your front-end domain here
+    "http://localhost:3000",
 ]
 
 app.add_middleware(
