@@ -20,10 +20,10 @@ export default function Menu(props) {
                                 Imagens
                             </a>
                             <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white mr-4">
-                                Examples
+                                Modelos
                             </a>
                             <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white">
-                                Blog
+                                Upload
                             </a>
                         </div>
                         <div>

@@ -31,8 +31,9 @@ function App() {
   };
 
   const pages = () => {
+    
     if (token == null) {
-      return (
+      return (        
         <div>
             {chosePage()}
         </div>
@@ -40,6 +41,7 @@ function App() {
     } else {
       return <Home />;
     }
+    
   };
 
   return <React.Fragment>{pages()}</React.Fragment>;

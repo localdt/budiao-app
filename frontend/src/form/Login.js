@@ -63,6 +63,10 @@ export default function Login(props) {
                                 onChange={(event) => {
                                     onChangeForm("username", event);
                                 }}
+                                required
+                                onInvalid={(event) =>
+                                    event.currentTarget.setCustomValidity('Preencha o email.')
+                                }
                             />
                             <input
                                 type="password"
@@ -71,6 +75,10 @@ export default function Login(props) {
                                 onChange={(event) => {
                                     onChangeForm("password", event);
                                 }}
+                                required
+                                onInvalid={(event) =>
+                                    event.currentTarget.setCustomValidity('Preencha a senha.')
+                                }
                             />
                         </div>
                         <div className="text-center mt-6">

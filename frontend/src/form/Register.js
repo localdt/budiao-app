@@ -138,27 +138,11 @@ export default function Register(props) {
                                 })}
                             </select>
                             <input
-                                type="number"
-                                placeholder="Telefone"
-                                className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
-                                onChange={(event) => {
-                                    onChangeForm("username", event);
-                                }}
-                            />
-                            <input
                                 type="email"
                                 placeholder="Email"
                                 className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
                                 onChange={(event) => {
                                     onChangeForm("email", event);
-                                }}
-                            />
-                            <input
-                                type="text"
-                                placeholder="Usuário"
-                                className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
-                                onChange={(event) => {
-                                    onChangeForm("username", event);
                                 }}
                             />
                             <input
