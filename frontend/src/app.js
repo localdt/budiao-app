@@ -5,6 +5,7 @@ import Login from "./form/Login";
 import Register from "./form/Register";
 import Home from "./Home";
 import Map from "./form/Map";
+import Upload from "./form/Upload";
 
 function App() {
   const [page, setPage] = useState("login");
@@ -27,6 +28,10 @@ function App() {
     }
     if (page === "map") {
       return <Map setPage={setPage} />;
+    }
+    if (page === "upload") {
+      console.log("=============UPLOAD===========")
+      return <Upload setPage={setPage} />;
     }
   };
 

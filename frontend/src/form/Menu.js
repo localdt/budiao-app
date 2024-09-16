@@ -1,12 +1,12 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 export default function Menu(props) {
     return (
         <React.Fragment>
             <div>
                 <nav class="flex items-center justify-between flex-wrap bg-blue-400 p-6">
                     <div class="flex items-center flex-shrink-0 text-white mr-6">
-                        
+
                         <span class="font-semibold text-xl tracking-tight">Budião App</span>
                     </div>
                     <div class="block lg:hidden">
@@ -22,9 +22,16 @@ export default function Menu(props) {
                             <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white mr-4">
                                 Modelos
                             </a>
-                            <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white">
-                                Upload
-                            </a>
+                            <Link
+                                to="/upload"
+                                onClick={() => {
+                                    props.setPage("upload");
+                                }}
+                            >
+                                <span className="block mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white cursor-pointer">Logar</span>
+
+                            </Link>
+
                         </div>
                         <div>
                             <a href="/?login" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-blue-500 hover:bg-white mt-4 lg:mt-0">Logout</a>
