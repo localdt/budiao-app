@@ -28,13 +28,13 @@ export default function Menu(props) {
                                     props.setPage("upload");
                                 }}
                             >
-                                <span className="block mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white cursor-pointer">Logar</span>
+                                <span className="block mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white cursor-pointer">Upload</span>
 
                             </Link>
 
                         </div>
                         <div>
-                            <a href="/?login" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-blue-500 hover:bg-white mt-4 lg:mt-0">Logout</a>
+                            <a href="/login" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-blue-500 hover:bg-white mt-4 lg:mt-0">Logout</a>
                         </div>
                     </div>
                 </nav>

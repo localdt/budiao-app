@@ -160,7 +160,7 @@ export default function Register(props) {
                             <p className="mt-4 text-sm">
                                 Já possui uma conta?{" "}
                                 <Link
-                                    to="/?login"
+                                    to="/login"
                                     onClick={() => {
                                         props.setPage("login");
                                     }}

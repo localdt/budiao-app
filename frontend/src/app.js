@@ -1,55 +1,25 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
+import { Route, Routes } from 'react-router-dom'
 import Forgot from "./form/Forgot";
 import Login from "./form/Login";
 import Register from "./form/Register";
-import Home from "./Home";
 import Map from "./form/Map";
 import Upload from "./form/Upload";
 
 function App() {
-  const [page, setPage] = useState("login");
-  const [token, setToken] = useState();
-
-  useEffect(() => {
-    const auth = localStorage.getItem("auth_token");
-    setToken(auth);
-  }, [token]);
-
-  const chosePage = () => {
-    if (page === "login") {
-      return <Login setPage={setPage} />;
-    }
-    if (page === "forgot") {
-      return <Forgot setPage={setPage} />;
-    }
-    if (page === "register") {
-      return <Register setPage={setPage} />;
-    }
-    if (page === "map") {
-      return <Map setPage={setPage} />;
-    }
-    if (page === "upload") {
-      console.log("=============UPLOAD===========")
-      return <Upload setPage={setPage} />;
-    }
-  };
-
-  const pages = () => {
-    
-    if (token == null) {
-      return (        
-        <div>
-            {chosePage()}
-        </div>
-      );
-    } else {
-      return <Home />;
-    }
-    
-  };
-
-  return <React.Fragment>{pages()}</React.Fragment>;
+  return (
+    <div>
+      <Routes>
+        <Route path='/' element={<Login/>} />
+        <Route path='/login' element={<Login/>} />
+        <Route path='/register' element={<Register/>}/>
+        <Route path='/map' element={<Map/>}/>
+        <Route path='/upload' element={<Upload/>}/>
+        <Route/>
+      </Routes>
+    </div>
+  )
 }
 
 export default App;

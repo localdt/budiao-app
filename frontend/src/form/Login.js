@@ -31,8 +31,7 @@ export default function Login(props) {
                 toast.success(response.data.detail);
                 // reload page after success login
                 setTimeout(() => {
-                    navigate("/?map")
-                    props.setPage("map");
+                    navigate("/map")
                 }, 1000);
 
             })
@@ -91,7 +90,7 @@ export default function Login(props) {
                             <p className="mt-4 text-sm">
                                 Não possui login?{" "}
                                 <Link
-                                    to="/?register"
+                                    to="/register"
                                     onClick={() => {
                                         props.setPage("register");
                                     }}
