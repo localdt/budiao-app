@@ -5,25 +5,36 @@ from fastapi import UploadFile
 
 T = TypeVar('T')
 
-class File(BaseModel):
-    name: str
-    path: str
-
-class SightingBase(BaseModel):
-    longitude: float
-    latitude: float
-    #files: List[UploadFile]
-
 class Response(BaseModel):
     detail: str
     result: Optional[T] = None
+    
+class FileBase(BaseModel):
+    name: str
+    path: str
+    sighting_id: int
 
-class SightingCreate(SightingBase):    
+class FileCreate(FileBase):
+    name: str
+    path: str
+    sighting_id: int
+    
+class File(FileBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+    
+class SightingBase(BaseModel):
     longitude: float
     latitude: float
 
+class SightingCreate(SightingBase):    
+    pass
+
 class Sighting(SightingBase):
     id: int
+    #files: list[File] = []
 
     class Config:
         orm_mode = True
