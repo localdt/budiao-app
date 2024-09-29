@@ -1,73 +1,137 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import React, { useState, useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
+import axios from 'axios';
 import { toast } from "react-toastify";
-import Menu from "./Menu";
+
 export default function Upload(props) {
+  const [files, setFiles] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState({}); // To track the progress
+  const [previews, setPreviews] = useState([]); // Store image previews
+  const [messages, setMessages] = useState({}); // Store upload messages
 
-    return (
-        <React.Fragment>
+  // Handle file drop
+  const onDrop = useCallback((acceptedFiles) => {
+    const filteredFiles = acceptedFiles.filter(file => file.name.split('.').pop().toLowerCase() === 'png');
 
-            <div className="bg-blue-400 h-screen w-screen sm:px-8 md:px-16 sm:py-8">
-                <main class="container mx-auto max-w-screen-lg h-full">
+    if (filteredFiles.length !== acceptedFiles.length) {
+      alert('Only .png files are supported. Non-png files will not be listed.');
+    }
 
-                    <article aria-label="File Upload Modal" class="relative h-full flex flex-col bg-white shadow-xl rounded-md" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" ondragleave="dragLeaveHandler(event);" ondragenter="dragEnterHandler(event);">
+    setFiles((prevFiles) => [...prevFiles, ...filteredFiles]);
 
-                        <div id="overlay" class="w-full h-full absolute top-0 left-0 pointer-events-none z-50 flex flex-col items-center justify-center rounded-md">
-                            <i>
-                                <svg class="fill-current w-12 h-12 mb-3 text-blue-700" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                    <path d="M19.479 10.092c-.212-3.951-3.473-7.092-7.479-7.092-4.005 0-7.267 3.141-7.479 7.092-2.57.463-4.521 2.706-4.521 5.408 0 3.037 2.463 5.5 5.5 5.5h13c3.037 0 5.5-2.463 5.5-5.5 0-2.702-1.951-4.945-4.521-5.408zm-7.479-1.092l4 4h-3v4h-2v-4h-3l4-4z" />
-                                </svg>
-                            </i>
-                            <p class="text-lg text-blue-700">Selecione imagens</p>
-                        </div>
+    // Generate previews for PNG files only
+    const previewUrls = filteredFiles.map((file) =>
+      Object.assign(file, {
+        preview: URL.createObjectURL(file), // Create a preview URL
+      })
+    );
+    setPreviews((prevPreviews) => [...prevPreviews, ...previewUrls]);
+  }, []);
 
+  // Remove an individual file from the preview and files list
+  const removeFile = (indexToRemove) => {
+    setFiles((prevFiles) => prevFiles.filter((_, index) => index !== indexToRemove));
+    setPreviews((prevPreviews) => prevPreviews.filter((_, index) => index !== indexToRemove));
+  };
 
-                        <section class="h-full overflow-auto p-8 w-full h-full flex flex-col">
-                            <header class="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center">
-                                <p class="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center">
-                                    <span>Drag and drop your</span>&nbsp;<span>files anywhere or</span>
-                                </p>
-                                <input id="hidden-input" type="file" multiple class="hidden" />
-                                <button id="button" class="mt-2 rounded-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
-                                    Upload a file
-                                </button>
-                            </header>
+  // File upload handler with progress tracking and file type check
+  const handleUpload = () => {
+    files.forEach((file, index) => {
+      const fileExtension = file.name.split('.').pop().toLowerCase();
 
-                            <h1 class="pt-8 pb-3 font-semibold sm:text-lg text-gray-900">
-                                To Upload
-                            </h1>
+      if (fileExtension === 'png') {
+        const formData = new FormData();
+        formData.append('file', file);
 
-                            <ul id="gallery" class="flex flex-1 flex-wrap -m-1">
-                                <li id="empty" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
-                                    <img class="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
-                                    <span class="text-small text-gray-500">Nenhuma imagem selecionada</span>
-                                </li>
-                            </ul>
-                        </section>
+        axios
+          .post('http://localhost:8000/file/upload', formData, {
+            onUploadProgress: (progressEvent) => {
+              const progress = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setUploadProgress((prevProgress) => ({
+                ...prevProgress,
+                [index]: progress, // Update the progress of each file
+              }));
+            },
+          })
+          .then((response) => {
+              console.log(response);
+              // add successfully notif
+              toast.success(response.data.detail);
+          })
+          .catch((response) => {
+            toast.error(response.data.detail);
+            setMessages((prevMessages) => ({
+              ...prevMessages,
+              [index]: 'Upload failed. Please try again.',
+            }));
+            alert('An image was not uploaded successfully.');
+          });
+      }
+    });
+  };
 
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    multiple: true, // Enable multiple uploads
+    accept: 'image/*', // Accept only image files
+  });
 
-                        <footer class="flex justify-end px-8 pb-8 pt-4">
-                            <button id="submit" class="rounded-sm px-3 py-1 bg-blue-700 hover:bg-blue-500 text-white focus:shadow-outline focus:outline-none">
-                                Upload now
-                            </button>
-                            <Link
-                                to="/map"
-                                onClick={() => {
-                                    props.setPage("map");
-                                }}
-                            >
-                                <button id="cancel" class="ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
-                                    Cancel
-                                </button>
-
-                            </Link>
-                        </footer>
-                    </article>
-                </main>
+  return (
+    <React.Fragment>
+      <div className="min-h-screen bg-blue-400 flex justify-center items-center">
+      <div className="container mx-auto max-w-screen-lg h-full py-12 px-12 bg-white rounded-2xl shadow-xl z-20">
+          <div className="upload-page">
+            <div {...getRootProps()} style={{ border: '2px dashed #ccc', padding: '20px' }}>
+              <input {...getInputProps()} />
+              <p>Arraste as imagens aqui ou clique para selecioná-las</p>
             </div>
+            {files.map((file, index) => {
+              const progressBarColor = 'blue'; // Always blue for .png files
 
-        </React.Fragment >
-    )
+              return (
+                <div key={index} style={{ marginTop: '20px' }}>
+                  <p>{file.name}</p>
+                  <progress
+                    value={uploadProgress[index] || 0}
+                    max="100"
+                    style={{
+                      width: '100%',
+                      color: progressBarColor,
+                      backgroundColor: progressBarColor,
+                    }}
+                  />
+                  <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}>
+                    {previews[index] && (
+                      <>
+                        <img
+                          src={previews[index].preview}
+                          alt={`preview ${index}`}
+                          style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                        />
+                        <button
+                          onClick={() => removeFile(index)}
+                          style={{ marginLeft: '10px', color: 'red' }}
+                        >
+                          Remover
+                        </button>
+                      </>
+                    )}
+                  </div>
+                  <div style={{ marginTop: '10px', color: 'green' }}>
+                    {messages[index] && <p>{messages[index]}</p>}
+                  </div>
+                </div>
+              );
+            })}
+            <button onClick={handleUpload} class="block mt-4 lg:inline-block text-sm px-4 py-2 leading-none border rounded text-blue-500 border-blue-500 hover:text-blue-500 hover:bg-white">
+              Enviar
+            </button>
+            
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  );
 }

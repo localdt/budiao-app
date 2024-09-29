@@ -3,7 +3,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .utils.config import async_engine, db
-from .router import user, authentication
+from .router import user, authentication, file
 
 app = FastAPI(
         title= "Budiao App",
@@ -35,3 +35,4 @@ async def startup():
     
 app.include_router(authentication.router)
 app.include_router(user.router)
+app.include_router(file.router)

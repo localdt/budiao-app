@@ -167,6 +167,7 @@ export default function Register(props) {
                                 >
                                     <span className="underline cursor-pointer">Logar</span>
                                 </Link>
+                                
                                 {" "}
                             </p>
                         </div>
