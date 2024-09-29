@@ -5,7 +5,8 @@ from typing import TypeVar, Optional
 T = TypeVar('T')
 
 class FileBase(BaseModel):
-    filename: str
+    name: str
+    path: str
 
 class Response(BaseModel):
     detail: str

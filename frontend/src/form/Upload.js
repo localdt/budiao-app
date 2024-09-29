@@ -14,7 +14,7 @@ export default function Upload(props) {
     const filteredFiles = acceptedFiles.filter(file => file.name.split('.').pop().toLowerCase() === 'png');
 
     if (filteredFiles.length !== acceptedFiles.length) {
-      alert('Only .png files are supported. Non-png files will not be listed.');
+      toast.warn(`Somente imagens com extensão .png serão aceitas.`);
     }
 
     setFiles((prevFiles) => [...prevFiles, ...filteredFiles]);
@@ -36,42 +36,61 @@ export default function Upload(props) {
 
   // File upload handler with progress tracking and file type check
   const handleUpload = () => {
-    files.forEach((file, index) => {
+  
+    const uploadPromises = files.map((file, index) => {
       const fileExtension = file.name.split('.').pop().toLowerCase();
-
+  
       if (fileExtension === 'png') {
         const formData = new FormData();
         formData.append('file', file);
-
-        axios
-          .post('http://localhost:8000/file/upload', formData, {
-            onUploadProgress: (progressEvent) => {
-              const progress = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              );
-              setUploadProgress((prevProgress) => ({
-                ...prevProgress,
-                [index]: progress, // Update the progress of each file
-              }));
-            },
-          })
-          .then((response) => {
-              console.log(response);
-              // add successfully notif
-              toast.success(response.data.detail);
-          })
-          .catch((response) => {
-            toast.error(response.data.detail);
-            setMessages((prevMessages) => ({
-              ...prevMessages,
-              [index]: 'Upload failed. Please try again.',
+  
+        // Return the axios request as a promise
+        return axios.post('http://localhost:8000/sightings/upload', formData, {
+          onUploadProgress: (progressEvent) => {
+            const progress = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadProgress((prevProgress) => ({
+              ...prevProgress,
+              [index]: progress, // Update the progress of each file
             }));
-            alert('An image was not uploaded successfully.');
-          });
+          },
+        })
+        .then((response) => {
+          // Track successful upload
+          setMessages((prevMessages) => ({
+            ...prevMessages,
+            [index]: 'Enviado com sucesso',
+          }));
+        })
+        .catch((error) => {
+          // Track failed upload
+          setMessages((prevMessages) => ({
+            ...prevMessages,
+            [index]: 'Falha ao enviar',
+          }));
+        });
+      } else {
+        return Promise.resolve(); // Skip non-png files
+      }
+    });
+  
+    // Wait for all uploads to complete
+    Promise.all(uploadPromises).then(() => {
+      const failedUploads = files.filter((_, index) => messages[index] === 'Falha ao enviar');
+      const successfulUploads = files.filter((_, index) => messages[index] === 'Enviado com sucesso');
+  
+      // Show a single toast after all uploads are done
+      if (failedUploads.length === 0) {
+        toast.success(`Arquivo(s) enviado(s) com sucesso!`);
+      } else if (successfulUploads.length > 0) {
+        toast.warn(`Imagens parcialmente enviadas. Sucesso: ${successfulUploads.length} arquivo(s). Falha: ${failedUploads.length}  arquivo(s).`);
+      } else {
+        toast.error('Falhar ao enviar o(s) arquivo(s).');
       }
     });
   };
-
+  
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     multiple: true, // Enable multiple uploads

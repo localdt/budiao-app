@@ -3,7 +3,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .utils.config import async_engine, db
-from .router import user, authentication, file
+from .router import sighting, user, authentication
 
 app = FastAPI(
         title= "Budiao App",
@@ -31,8 +31,9 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup():
     async with async_engine.begin() as conn:
+        #await conn.run_sync(db.metadata.drop_all) # delete all tables
         await conn.run_sync(db.metadata.create_all)
     
 app.include_router(authentication.router)
 app.include_router(user.router)
-app.include_router(file.router)
+app.include_router(sighting.router)
