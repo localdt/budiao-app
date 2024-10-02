@@ -19,7 +19,7 @@ class FileCreate(FileBase):
     path: str
     sighting_id: int
     
-class File(FileBase):
+class SightingFile(FileBase):
     id: int
 
     class Config:

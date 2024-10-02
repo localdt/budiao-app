@@ -16,8 +16,8 @@ class File(db):
     __tablename__ = "files"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    name = Column(String, unique=True, index=True)
-    path = Column(String)
+    name = Column(String, index=True)
+    path = Column(String, index=True)
     
     sighting_id = Column(Integer, ForeignKey("sightings.id"))
     sightings = relationship("Sighting", back_populates="files")

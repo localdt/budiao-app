@@ -1,10 +1,10 @@
  # Funções CRUD
 from sqlalchemy.orm import Session
 from ..model.sighting import Sighting
+from ..model.file import File 
 from ..schema.sighting_schema import SightingCreate, FileCreate
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.ext.asyncio import AsyncSession
 
 class SightingService:
@@ -24,9 +24,13 @@ class SightingService:
         await db.refresh(db_sighting)
         return db_sighting
 
-    async def file_sighting(db: AsyncSession, file: FileCreate):
-        db_file = FileCreate(name=file.name,path=file.path)
+    async def create_sighting_file(db: AsyncSession, file: FileCreate):
+        db_file = File(name=file.name,path=file.path,sighting_id=file.sighting_id)
         db.add(db_file)
         await db.commit()
         await db.refresh(db_file)
         return db_file
+    
+    async def get_sightings_files(db: AsyncSession, skip: int = 0, limit: int = 10):
+        result = await db.execute(select(File).offset(skip).limit(limit))
+        return result.scalars().all()
