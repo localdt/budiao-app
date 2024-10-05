@@ -11,8 +11,6 @@ router = APIRouter(prefix="/users", tags=['User'])
 
 @router.post("/users/", response_model=User)
 async def create_user_route(user: UserCreate, db: AsyncSession = Depends(get_async_session)):
-    print("======= user ======")
-    print(user)
     db_user = await UserService.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")

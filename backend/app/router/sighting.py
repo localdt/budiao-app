@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..service.sighting_service import SightingService
-from ..schema.sighting_schema import SightingCreate, Sighting, Response, FileCreate, SightingFile
+from ..schema.sighting_schema import SightingCreate, Sighting, Response, FileCreate, SightingFile, SightingForm
 from ..utils.config import get_async_session
 from pathlib import Path
 from typing import List
@@ -17,32 +17,37 @@ router = APIRouter(prefix="/sightings", tags=['Sighting'])
 UPLOAD_DIR = Path("sightings")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
-@router.post("/upload/", response_model=Response)
-async def submit_sighting(longitude: float = Form(...), latitude: float = Form(...), files: List[UploadFile] = File(...), db: AsyncSession = Depends(get_async_session)):
-    #TODO rollback the entire transaction in case of error
-    #Create sighting
-    sighting_data = SightingCreate(latitude=latitude, longitude=longitude)
-    sighting = await SightingService.create_sighting(db, sighting_data)
+@router.post("/upload", response_model=Response)
+async def submit_sighting(latitude: Annotated[str, Form()], longitude: Annotated[str, Form()], file_uploads: list[UploadFile], db: AsyncSession = Depends(get_async_session)):
     
-    #Create files in the upload folder
-    for file in files:    
-        file_path = UPLOAD_DIR / file.filename
-        file_data = FileCreate(name=file.filename,path=str(file_path), sighting_id = sighting.id)
-        with file_path.open("wb") as buffer:
-            buffer.write(await file.read())
+    try:
+        # Create sighting
+        sighting_data = SightingCreate(latitude=latitude, longitude=longitude)
+        sighting = await SightingService.create_sighting(db, sighting_data)
+        sighting_id = sighting.id
         
-        #Create files in the database associated with the sighting
-        sighting_file = await SightingService.create_sighting_file(db, file_data)
+        # Upload files and create sighting files
+        for file in file_uploads:
+            save_to = UPLOAD_DIR / file.filename
+            # Save file to disk
+            with save_to.open("wb") as buffer:
+                buffer.write(file.file.read())
+            # Create sighting file record in the database
+            file_data = FileCreate(name=file.filename, path=str(save_to), sighting_id=sighting_id)
+            await SightingService.create_sighting_file(db, file_data)
 
-    return Response(detail="Avistamento cadastrado com sucesso!")
+        return Response(detail="Avistamento cadastrado com sucesso!")
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Erro ao cadastrar avistamento.")
 
-@router.get("/sightings/", response_model=list[Sighting])
+@router.get("/sightings", response_model=list[Sighting])
 async def read_sightings(skip: int = 0, limit: int = 10, db: AsyncSession = Depends(get_async_session)):
     sightings = await SightingService.get_sightings(db, skip=skip, limit=limit)
     return sightings
 
 
-@router.get("/files/", response_model=list[SightingFile])
+@router.get("/files", response_model=list[SightingFile])
 async def read_sightings_files(skip: int = 0, limit: int = 10, db: AsyncSession = Depends(get_async_session)):
     sightings_files = await SightingService.get_sightings_files(db, skip=skip, limit=limit)
     return sightings_files

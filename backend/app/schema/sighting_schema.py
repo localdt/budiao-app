@@ -1,7 +1,7 @@
  # Esquemas Pydantic
 from pydantic import BaseModel
 from typing import TypeVar, Optional, List
-from fastapi import UploadFile
+from fastapi import UploadFile, File
 
 T = TypeVar('T')
 
@@ -39,4 +39,7 @@ class Sighting(SightingBase):
     class Config:
         orm_mode = True
 
-
+class SightingForm(BaseModel):
+    longitude: float
+    latitude: float
+    files: List[UploadFile] = File(...)

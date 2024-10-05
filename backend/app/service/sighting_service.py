@@ -22,6 +22,8 @@ class SightingService:
         db.add(db_sighting)
         await db.commit()
         await db.refresh(db_sighting)
+        print("========= db_sighting.id =======")
+        print(db_sighting.id)
         return db_sighting
 
     async def create_sighting_file(db: AsyncSession, file: FileCreate):
@@ -29,6 +31,8 @@ class SightingService:
         db.add(db_file)
         await db.commit()
         await db.refresh(db_file)
+        print("========= db_file.id =======")
+        print(db_file.id)
         return db_file
     
     async def get_sightings_files(db: AsyncSession, skip: int = 0, limit: int = 10):
