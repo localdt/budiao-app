@@ -116,24 +116,29 @@ export default function Upload(props) {
             <div className="space-y-4">
               <input
                 placeholder="Latitude"
-                className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
+                className="read-only:block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
                 type="text"
                 value={uploadForm.latitude}
                 onChange={(event) => onChangeForm("latitude", event)}
+                
               />
               <input
                 placeholder="Longitude"
-                className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
+                className="read-only:block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
                 type="text"
                 value={uploadForm.longitude}
                 onChange={(event) => onChangeForm("longitude", event)}
+                
               />
-
               <input
                 className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-blue-400"
                 type="file"
                 onChange={handleFileInputChange}
                 multiple
+                required
+                onInvalid={(event) =>
+                  event.currentTarget.setCustomValidity('Selecione as imagens')
+                }
               />
             </div>
             <div className="text-center mt-6">

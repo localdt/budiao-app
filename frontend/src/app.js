@@ -6,6 +6,8 @@ import Login from "./form/Login";
 import Register from "./form/Register";
 import Map from "./form/Map";
 import Upload from "./form/Upload";
+import Sighting from "./form/Sighting";
+import SightingDetail from "./form/SightingDetail";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
         <Route path='/register' element={<Register/>}/>
         <Route path='/map' element={<Map/>}/>
         <Route path='/upload' element={<Upload/>}/>
+        <Route path='/sighting' element={<Sighting/>}/>
+        <Route path="/sighting-detail/:id" element={<SightingDetail />} />
         <Route/>
       </Routes>
     </div>
