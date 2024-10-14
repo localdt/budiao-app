@@ -19,4 +19,5 @@ class Sighting(db):
     longitude = Column(Float)
     latitude = Column(Float)
     status = Column(String)
+    created = Column(DateTime, default=func.now())
     files = relationship("File")

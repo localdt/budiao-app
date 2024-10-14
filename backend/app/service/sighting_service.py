@@ -2,7 +2,7 @@
 from sqlalchemy.orm import Session
 from ..model.sighting import Sighting
 from ..model.file import File 
-from ..schema.sighting_schema import SightingCreate, FileCreate
+from ..schema.sighting_schema import SightingCreate, FileCreate, FileUpdate
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -25,7 +25,7 @@ class SightingService:
         return db_sighting
 
     async def create_sighting_file(db: AsyncSession, file: FileCreate):
-        db_file = File(name=file.name,path=file.path,sighting_id=file.sighting_id)
+        db_file = File(name=file.name,path=file.path,status=file.status,sighting_id=file.sighting_id)
         db.add(db_file)
         await db.commit()
         await db.refresh(db_file)
@@ -43,11 +43,12 @@ class SightingService:
         result = await db.execute(select(File).filter(File.id == file_id))
         return result.scalars().first()
     
-    async def update_sighting_file(db: AsyncSession, sighting_file_id: int, file: FileCreate):
+    async def update_sighting_file(db: AsyncSession, sighting_file_id: int, file: FileUpdate):
         result = await db.execute(select(File).filter(File.id == sighting_file_id))
         db_sighting_file = result.scalars().first() 
         if db_sighting_file:
             db_sighting_file.status = file.status
+            db_sighting_file.ml_class_result = file.ml_result
             await db.commit()
             await db.refresh(db_sighting_file)
             return db_sighting_file

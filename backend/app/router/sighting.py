@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..service.sighting_service import SightingService
-from ..schema.sighting_schema import SightingCreate, Sighting, Response, FileCreate, SightingFile, SightingForm
+from ..schema.sighting_schema import SightingCreate, Sighting, Response, FileCreate, SightingFile, SightingForm, FileUpdate
 from ..utils.config import get_async_session
 from pathlib import Path
 from typing import List
@@ -50,8 +50,16 @@ async def submit_sighting(latitude: Annotated[str, Form()], longitude: Annotated
             print("========= call ml ANTES ==========")
             serialized = json.dumps(os.path.join(os.getcwd(), save_to))
             response_ml = requests.post(url=service_url, data=serialized, headers={'content_type':'application/json'})
-            print(str(response_ml.content)) # type: ignore
+            ml_result = response_ml.content
+            print(str(response_ml.content))
             print("========= call ml DEPOIS ==========")
+            
+            # Update sighting file results in the database
+            print("========= update_sighting_file ANTES ==========")
+            print(ml_result)
+            file_update_data = FileUpdate(status='CONCLUÍDO', ml_result=ml_result)
+            await SightingService.update_sighting_file(db, sighting_file_id, file_update_data)
+            print("========= update_sighting_file DEPOIS ==========")
 
         return Response(detail="Avistamento cadastrado com sucesso!")
     

@@ -3,8 +3,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate  } from 'react-router-dom'
+import Moment from 'moment';
 
 export default function Sighting(props) {
+    const moment = require('moment-timezone');
     const [rows, setRows] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {
@@ -17,6 +19,7 @@ export default function Sighting(props) {
                 .get(`http://localhost:8000/sightings/sightings?skip=0&limit=100`)
                 .then((response) => {
                     console.log(response.data.length);
+                    console.log(response.data);
                     console.log(response.data);
                     setRows(response.data);
                 })
@@ -61,8 +64,9 @@ export default function Sighting(props) {
                                         <td className="border p-2">{row.id}</td>
                                         <td className="border p-2">{row.longitude}</td>
                                         <td className="border p-2">{row.latitude}</td>
-                                        <td className="border p-2">04/10/2024 10:30:00</td>
-                                        <td className="border p-2">Processando</td>
+                                       
+                                        <td className="border p-2">{moment(row.created).tz('America/Sao_Paulo').format('DD/MM/YYYY HH:mm:ss')}</td>
+                                        <td className="border p-2">{row.status}</td>
                                         <td className="border p-2">
                                             <button id="imagens"
                                                 className="bg-yellow-500 text-white p-1 rounded mr-2"

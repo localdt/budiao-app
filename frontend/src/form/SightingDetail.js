@@ -63,10 +63,8 @@ export default function SightingDetail(props) {
                                                 alt="Imagem" 
                                                 style={{ width: "100px", height: "100px", objectFit: "cover" }} 
                                             /></td>
-                                        <td className="border p-2">Processando</td>
-                                        <td className="border p-2">
-                                           
-                                        </td>
+                                        <td className="border p-2">{row.status}</td>
+                                        <td className="border p-2">{row.ml_result}</td>
                                     </tr>
                                 ))
                             ) : (

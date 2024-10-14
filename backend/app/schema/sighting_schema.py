@@ -2,6 +2,7 @@
 from pydantic import BaseModel
 from typing import TypeVar, Optional, List
 from fastapi import UploadFile, File
+from datetime import date, datetime, time, timedelta
 
 T = TypeVar('T')
 
@@ -12,16 +13,23 @@ class Response(BaseModel):
 class FileBase(BaseModel):
     name: str
     path: str
+    status: str
     sighting_id: int
 
 class FileCreate(FileBase):
     name: str
     path: str
-    sighting_id: int
     status: str
+    sighting_id: int
+    
+class FileUpdate(BaseModel):
+    status: str
+    ml_result: str
     
 class SightingFile(FileBase):
     id: int
+    ml_result: str = None
+    created: datetime = None
 
     class Config:
         orm_mode = True
@@ -29,6 +37,7 @@ class SightingFile(FileBase):
 class SightingBase(BaseModel):
     longitude: float
     latitude: float
+    created: datetime = None
 
 class SightingCreate(SightingBase):    
     status: str
