@@ -18,7 +18,7 @@ class SightingService:
         return result.scalars().all()
 
     async def create_sighting(db: AsyncSession, sighting: SightingCreate):
-        db_sighting = Sighting(latitude=sighting.latitude, longitude=sighting.longitude)
+        db_sighting = Sighting(latitude=sighting.latitude, longitude=sighting.longitude, status=sighting.status)
         db.add(db_sighting)
         await db.commit()
         await db.refresh(db_sighting)
@@ -42,3 +42,13 @@ class SightingService:
     async def get_file_by_id(db: AsyncSession, file_id: int):
         result = await db.execute(select(File).filter(File.id == file_id))
         return result.scalars().first()
+    
+    async def update_sighting_file(db: AsyncSession, sighting_file_id: int, file: FileCreate):
+        result = await db.execute(select(File).filter(File.id == sighting_file_id))
+        db_sighting_file = result.scalars().first() 
+        if db_sighting_file:
+            db_sighting_file.status = file.status
+            await db.commit()
+            await db.refresh(db_sighting_file)
+            return db_sighting_file
+        return None

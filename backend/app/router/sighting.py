@@ -27,12 +27,14 @@ UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 @router.post("/upload", response_model=Response)
 async def submit_sighting(latitude: Annotated[str, Form()], longitude: Annotated[str, Form()], file_uploads: list[UploadFile], db: AsyncSession = Depends(get_async_session)):
     
-    try:
+    #try:
         # Create sighting
-        sighting_data = SightingCreate(latitude=latitude, longitude=longitude)
+        sighting_data = SightingCreate(latitude=latitude, longitude=longitude, status='PROCESSANDO')
+        print("============== antes create_sighting ===========")
+        print(sighting_data)
         sighting = await SightingService.create_sighting(db, sighting_data)
         sighting_id = sighting.id
-        
+        print("============== depois create_sighting ===========")
         # Upload files and create sighting files
         for file in file_uploads:
             save_to = UPLOAD_DIR / file.filename
@@ -40,10 +42,11 @@ async def submit_sighting(latitude: Annotated[str, Form()], longitude: Annotated
             with save_to.open("wb") as buffer:
                 buffer.write(file.file.read())
             # Create sighting file record in the database
-            file_data = FileCreate(name=file.filename, path=str(save_to), sighting_id=sighting_id)
-            await SightingService.create_sighting_file(db, file_data)
+            file_data = FileCreate(name=file.filename, path=str(save_to), sighting_id=sighting_id, status='PROCESSANDO')
+            sighting_file = await SightingService.create_sighting_file(db, file_data)
+            sighting_file_id = sighting_file.id
             
-            #Call ML Model - input will be filename
+            # Call ML Model - input will be filename
             print("========= call ml ANTES ==========")
             serialized = json.dumps(os.path.join(os.getcwd(), save_to))
             response_ml = requests.post(url=service_url, data=serialized, headers={'content_type':'application/json'})
@@ -52,8 +55,8 @@ async def submit_sighting(latitude: Annotated[str, Form()], longitude: Annotated
 
         return Response(detail="Avistamento cadastrado com sucesso!")
     
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Erro ao cadastrar avistamento.")
+    #except Exception as e:
+        #raise HTTPException(status_code=500, detail="Erro ao cadastrar avistamento.")
 
 @router.get("/sightings", response_model=list[Sighting])
 async def read_sightings(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_async_session)):

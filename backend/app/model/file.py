@@ -1,8 +1,8 @@
 # Modelos SQLAlchemy
 from __future__ import annotations
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, DateTime
 from ..utils.config import db
-
+from sqlalchemy.sql import func
 from typing import List
 
 from sqlalchemy import ForeignKey
@@ -18,6 +18,8 @@ class File(db):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String, index=True)
     path = Column(String, index=True)
-    
+    created = Column(DateTime, default=func.now())
+    status = Column(String, index=True)     
+    ml_class_result = Column(String, nullable=True)
     sighting_id = Column(Integer, ForeignKey("sightings.id"))
     sightings = relationship("Sighting", back_populates="files")

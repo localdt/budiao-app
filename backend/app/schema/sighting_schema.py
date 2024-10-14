@@ -18,6 +18,7 @@ class FileCreate(FileBase):
     name: str
     path: str
     sighting_id: int
+    status: str
     
 class SightingFile(FileBase):
     id: int
@@ -30,11 +31,11 @@ class SightingBase(BaseModel):
     latitude: float
 
 class SightingCreate(SightingBase):    
-    pass
+    status: str
 
 class Sighting(SightingBase):
     id: int
-    #files: list[File] = []
+    status: str
 
     class Config:
         orm_mode = True
