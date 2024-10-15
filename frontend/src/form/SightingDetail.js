@@ -46,10 +46,10 @@ export default function SightingDetail(props) {
                         <thead>
                             <tr className="bg-gray-100">
                                 <th className="border p-2">ID</th>
-                                <th className="border p-2">Imagem</th>
                                 <th className="border p-2">Caminho da Imagem</th>
-                                <th className="border p-2">Status</th>
-                                <th className="border p-2">Resultado</th>
+                                <th className="border p-2">Imagem</th>
+                                <th className="border p-2">Status do Processamento</th>
+                                <th className="border p-2">Resultado da Classificação</th>
                             </tr>
                         </thead>
                         <tbody>
