@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from "react-toastify";
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 import L from "leaflet";
+import { useNavigate } from 'react-router-dom'
 
 import "leaflet/dist/leaflet.css";
 
@@ -16,6 +17,7 @@ const icon = L.icon({
 
 const latitude = -8.08915093091523;
 const longitude = -34.79692857333338;
+
 
 function MyComponent({ marker, setMarker, setUploadForm }) {
   const map = useMapEvents({
@@ -43,6 +45,7 @@ function MyComponent({ marker, setMarker, setUploadForm }) {
 }
 
 export default function Upload(props) {
+  const navigate = useNavigate(); // Create a navigate function
   const [marker, setMarker] = useState(null); // state for the marker
   const [files, setFiles] = useState([]);
   const [uploadForm, setUploadForm] = useState({
@@ -64,6 +67,9 @@ export default function Upload(props) {
       .then((response) => {
         console.log(response);
         toast.success(response.data.detail);
+        setTimeout(() => {
+          navigate("/sighting")
+        }, 1000);
       })
       .catch((error) => {
         console.log(error);

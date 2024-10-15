@@ -24,11 +24,11 @@ class FileCreate(FileBase):
     
 class FileUpdate(BaseModel):
     status: str
-    ml_result: str
+    ml_class_result: Optional[str] = None
     
 class SightingFile(FileBase):
     id: int
-    ml_result: str = None
+    ml_class_result: Optional[str] = None
     created: datetime = None
 
     class Config:

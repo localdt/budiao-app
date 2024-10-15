@@ -53,7 +53,7 @@ export default function Sighting(props) {
                                 <th className="border p-2">Longitude</th>
                                 <th className="border p-2">Latitude</th>
                                 <th className="border p-2">Data/Hora</th>
-                                <th className="border p-2">Status</th>
+                             
                                 <th className="border p-2">Imagens</th>
                             </tr>
                         </thead>
@@ -66,7 +66,7 @@ export default function Sighting(props) {
                                         <td className="border p-2">{row.latitude}</td>
                                        
                                         <td className="border p-2">{moment(row.created).tz('America/Sao_Paulo').format('DD/MM/YYYY HH:mm:ss')}</td>
-                                        <td className="border p-2">{row.status}</td>
+                                      
                                         <td className="border p-2">
                                             <button id="imagens"
                                                 className="bg-yellow-500 text-white p-1 rounded mr-2"

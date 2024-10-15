@@ -57,7 +57,7 @@ async def submit_sighting(latitude: Annotated[str, Form()], longitude: Annotated
             # Update sighting file results in the database
             print("========= update_sighting_file ANTES ==========")
             print(ml_result)
-            file_update_data = FileUpdate(status='CONCLUÍDO', ml_result=ml_result)
+            file_update_data = FileUpdate(status='CONCLUÍDO', ml_class_result=ml_result)
             await SightingService.update_sighting_file(db, sighting_file_id, file_update_data)
             print("========= update_sighting_file DEPOIS ==========")
 

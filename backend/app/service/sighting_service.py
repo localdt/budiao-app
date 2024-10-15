@@ -48,7 +48,7 @@ class SightingService:
         db_sighting_file = result.scalars().first() 
         if db_sighting_file:
             db_sighting_file.status = file.status
-            db_sighting_file.ml_class_result = file.ml_result
+            db_sighting_file.ml_class_result = file.ml_class_result
             await db.commit()
             await db.refresh(db_sighting_file)
             return db_sighting_file
