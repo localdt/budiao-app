@@ -31,21 +31,34 @@ export default function SightingDetail(props) {
             console.error("Error fetching data:", error);
         }
     };
-    
+
+    const getHyperlink = (mlClassResult) => {
+        switch (mlClassResult) {
+            case 'Scarus zelindae_IP':
+                return "https://budioes.org/Budiao-Banana/";
+            case 'Sparisoma axillare_IP':
+                return "https://budioes.org/budiao-cinza/";
+            case 'Scarus trispinosus_ADT':
+                return "https://budioes.org/budiao-azul/";
+            default:
+                return "#";
+        }
+    };
+
     return (
         <React.Fragment>
             <div className="min-h-screen bg-blue-400 flex justify-center items-center">
                 <div className="py-12 px-12 min-w-fit bg-white rounded-2xl shadow-xl z-20">
                     <div>
                         <h1 className="text-3xl font-bold text-center mb-4">
-                            Meus Avistamentos
+                            Detalhes do Avistamento: ID {id}
                         </h1>
-                       
+
                     </div>
                     <table className="min-w-full table-auto bg-white border-collapse border border-gray-200">
                         <thead>
                             <tr className="bg-gray-100">
-                                <th className="border p-2">ID</th>
+                                <th className="border p-2">ID da Imagem</th>
                                 <th className="border p-2">Caminho da Imagem</th>
                                 <th className="border p-2">Imagem</th>
                                 <th className="border p-2">Status do Processamento</th>
@@ -58,13 +71,21 @@ export default function SightingDetail(props) {
                                     <tr key={row.id} className="text-center">
                                         <td className="border p-2">{row.id}</td>
                                         <td className="border p-2">{row.path} </td>
-                                        <td className="border p-2"><img 
-                                                src={`${baseURL}${row.id}`} 
-                                                alt="Imagem" 
-                                                style={{ width: "100px", height: "100px", objectFit: "cover" }} 
-                                            /></td>
+                                        <td className="border p-2"><img
+                                            src={`${baseURL}${row.id}`}
+                                            alt="Imagem"
+                                            style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                                        /></td>
                                         <td className="border p-2">{row.status}</td>
-                                        <td className="border p-2">{row.ml_class_result}</td>
+                                        <td className="border p-2"> <a
+                                            href={getHyperlink(row.ml_class_result)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-500 underline"
+                                            title={`Clique aqui para aprender mais sobre a espécie ${row.ml_class_result}`}
+                                        >
+                                            {row.ml_class_result}
+                                        </a></td>
                                     </tr>
                                 ))
                             ) : (

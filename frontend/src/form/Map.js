@@ -7,8 +7,9 @@ import markerIconPng from "leaflet/dist/images/marker-icon.png"
 import { Icon } from 'leaflet'
 import axios from "axios";
 import { toast } from "react-toastify";
-
+import Moment from 'moment';
 export default function Map(props) {
+    const moment = require('moment-timezone');
     useEffect(() => {
         fetchData();
     }, []);
@@ -57,12 +58,14 @@ export default function Map(props) {
                                 <Popup>
                                     Avistamento: {pin.id} <br />
                                     Latitude: {pin.latitude} <br />
-                                    Longitude: {pin.longitude}
+                                    Longitude: {pin.longitude} <br />
+                                    Data/Hora:{moment(pin.created).tz('America/Sao_Paulo').format('DD/MM/YYYY HH:mm:ss')}
                                 </Popup>
                                 <Tooltip sticky>
                                     Avistamento: {pin.id} <br />
                                     Latitude: {pin.latitude} <br />
-                                    Longitude: {pin.longitude}
+                                    Longitude: {pin.longitude} <br />
+                                    Data/Hora:{moment(pin.created).tz('America/Sao_Paulo').format('DD/MM/YYYY HH:mm:ss')}
                                 </Tooltip>
                             </Marker>
                         ))
